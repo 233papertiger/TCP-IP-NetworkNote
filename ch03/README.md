@@ -263,7 +263,7 @@ in_addr_t inet_addr(const char *string);
 #include <arpa/inet.h>
 int main(int argc, char *argv[])
 {
-    char *addr1 = "1.2.3.4";
+    char *addr1 = "1.2.3.4";    
     char *addr2 = "1.2.3.256";
 
     unsigned long conv_addr = inet_addr(addr1);
@@ -312,6 +312,9 @@ addr: 保存转换结果的 in_addr 结构体变量的地址值
 函数调用示例：
 
 [inet_aton.c](https://github.com/riba2534/TCP-IP-NetworkNote/blob/master/ch03/inet_aton.c)
+
+tips:
+一个字符在内存中只占一字节，而字符串本质上是多个字符组成的字符数组。C语言规定，在每一个字符串常量的结尾，系统都会自动加一个字符'\0'作为该字符串的“结束标志符”，系统据此判断字符串是否结束。这里要特别强调一点：'\0'是系统自动加上的，不是人为添加的。'\0' 是 ASCII 码为 0 的字符，它不会引起任何控制动作，也不是一个可以显示的字符。比如字符串常量"CHINA"，表面上看它只有 5 个字符，但实际上它在内存中占 6 字节，'C'、'H'、'I'、'N'、'A'、'\0' 各占一字节。如果要输出该字符串，'\0' 不会输出。也就是说，虽然实际上总共有 6 个字符，'\0' 也包括在其中，但输出时 '\0' 不会输出。系统从第一个字符 'C' 开始逐个输出字符，直到遇到 '\0'，则表示该字符串结束，停止输出。
 
 ```c
 #include <stdio.h>
@@ -383,7 +386,7 @@ int main(int argc, char *argv[])
     addr2.sin_addr.s_addr = htonl(0x1010101);
     //把addr1中的结构体信息转换为字符串的IP地址形式
     str_ptr = inet_ntoa(addr1.sin_addr);
-    strcpy(str_arr, str_ptr);
+    strcpy(str_arr, str_ptr);   /* strcpy()函数：是将一个字符串复制到另一块空间地址中的函数，'\0'是停止拷贝的终止条件，同时也会将'\0' 也复制到目标空间。 */
     printf("Dotted-Decimal notation1: %s \n", str_ptr);
 
     inet_ntoa(addr2.sin_addr);
